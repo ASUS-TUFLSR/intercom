@@ -17,9 +17,26 @@ const TicketDetails = () => {
     }
   ]);
 
-  const handleSummarize = () => {
-    setSummary('Summary: The customer is inquiring about pricing details.');
+  const handleSummarize = async () => {
+    try {
+      const combinedText = messageHistory.map(m => m.text).join(' ');
+      const response = await fetch('http://localhost:5000/api/gemini/summarize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: combinedText }),
+      });
+      const data = await response.json();
+      if (data.summary) {
+        setSummary(data.summary);
+      } else {
+        setSummary('Failed to get summary');
+      }
+    } catch (error) {
+      console.error('Error fetching summary:', error);
+      setSummary('Error generating summary');
+    }
   };
+  
 
   const handleSend = () => {
     if (!reply.trim()) return;
