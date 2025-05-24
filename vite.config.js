@@ -7,6 +7,10 @@ export default defineConfig({
   plugins: [react(),tailwindcss(),],
   server: {
     host: '0.0.0.0', 
-    port: 3000        
+    port: 3000,
+    allowedHosts: [
+      'localhost',
+      'intercom-dvce.onrender.com' // 🔥 Add your Render domain here
+    ]        
   }
 })
